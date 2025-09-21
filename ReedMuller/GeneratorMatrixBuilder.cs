@@ -6,6 +6,9 @@ public static class GeneratorMatrixBuilder
 {
     public static Matrix Build(int m)
     {
+        if (m <= 0)
+            throw new ArgumentException("Parameter m must be a positive integer.", nameof(m));
+
         if (m == 1)
         {
             return new Matrix(new int[,]

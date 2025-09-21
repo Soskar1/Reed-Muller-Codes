@@ -44,6 +44,13 @@ public class GeneratorMatrixBuilderTests
         CompareMatrices(expected, result);
     }
 
+    [Test]
+    public void Build_InvalidArgument_ThrowsException()
+    {
+        Assert.Throws<ArgumentException>(() => GeneratorMatrixBuilder.Build(0));
+        Assert.Throws<ArgumentException>(() => GeneratorMatrixBuilder.Build(-1));
+    }
+
     private void CompareMatrices(Matrix expected, Matrix actual)
     {
         Assert.That(actual.Rows, Is.EqualTo(expected.Rows));
