@@ -1,4 +1,4 @@
-﻿namespace ReedMullerCodes.Math.Tests;
+﻿namespace CodingTheory.Math.Tests;
 
 internal class MatrixUnitTests
 {

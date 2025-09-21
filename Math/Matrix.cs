@@ -1,4 +1,4 @@
-﻿namespace ReedMullerCodes.Math;
+﻿namespace CodingTheory.Math;
 
 public class Matrix
 {
