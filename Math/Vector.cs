@@ -2,5 +2,45 @@
 
 public class Vector
 {
+    private int[] m_values;
+    public int Length => m_values.Length;
 
+    public Vector(int[] values)
+    {
+        if (values.Length == 0)
+            throw new ArgumentException("Vector must have at least one element.");
+
+        m_values = values;
+    }
+
+    public int this[int index]
+    {
+        get => m_values[index];
+        set => m_values[index] = value;
+    }
+
+    public static Vector operator +(Vector v1, Vector v2)
+    {
+        if (v1.Length != v2.Length)
+            throw new ArgumentException("Vectors must be of the same length to add.");
+
+        int[] resultValues = new int[v1.Length];
+
+        for (int i = 0; i < v1.Length; ++i)
+            resultValues[i] = v1[i] + v2[i];
+
+        return new Vector(resultValues);
+    }
+
+    public static Vector operator *(Vector v, int scalar)
+    {
+        int[] resultValues = new int[v.Length];
+
+        for (int i = 0; i < v.Length; ++i)
+            resultValues[i] = v[i] * scalar;
+
+        return new Vector(resultValues);
+    }
+
+    public static Vector operator *(int scalar, Vector v) => v * scalar;
 }
