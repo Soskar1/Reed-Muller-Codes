@@ -13,6 +13,26 @@ public class Vector
         m_values = values;
     }
 
+    public Matrix ToColumnMatrix()
+    {
+        int[,] matrixValues = new int[Length, 1];
+
+        for (int i = 0; i < Length; ++i)
+            matrixValues[i, 0] = m_values[i];
+        
+        return new Matrix(matrixValues);
+    }
+
+    public Matrix ToRowMatrix()
+    {
+        int[,] matrixValues = new int[1, Length];
+
+        for (int j = 0; j < Length; ++j)
+            matrixValues[0, j] = m_values[j];
+
+        return new Matrix(matrixValues);
+    }
+
     public int this[int index]
     {
         get => m_values[index];
