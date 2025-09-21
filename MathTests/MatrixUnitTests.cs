@@ -1,4 +1,4 @@
-﻿namespace ReedMullerCodes.Math.Tests;
+﻿namespace CodingTheory.Math.Tests;
 
 internal class MatrixUnitTests
 {
@@ -6,13 +6,27 @@ internal class MatrixUnitTests
     public void MatrixInitialization_ValidParameters_MatrixCreated()
     {
         Matrix matrix = new Matrix(new int[,] { { 1, 2 }, { 3, 4 } });
-        Assert.Pass();
+        Assert.That(matrix[0, 0], Is.EqualTo(1));
+        Assert.That(matrix[0, 1], Is.EqualTo(2));
+        Assert.That(matrix[1, 0], Is.EqualTo(3));
+        Assert.That(matrix[1, 1], Is.EqualTo(4));
     }
 
     [Test]
     public void MatrixInitialization_InvalidParameters_ThrowsException()
     {
         Assert.Throws<ArgumentException>(() => new Matrix(new int[,] { }));
+    }
+
+    [Test]
+    public void MatrixInitialization_PassRowsAndColumns_MatrixCreated()
+    {
+        Matrix matrix = new Matrix(2, 3);
+        Assert.That(matrix.Rows, Is.EqualTo(2));
+        Assert.That(matrix.Columns, Is.EqualTo(3));
+
+        foreach (int value in matrix)
+            Assert.That(value, Is.EqualTo(0));
     }
 
     [Test]
@@ -177,5 +191,26 @@ internal class MatrixUnitTests
         Assert.That(column2.Length, Is.EqualTo(matrix.Rows));
         Assert.That(column2[0], Is.EqualTo(3));
         Assert.That(column2[1], Is.EqualTo(6));
+    }
+
+    [Test]
+    public void MatrixForEach_IteratesOverAllElementsInRowMajorOrder()
+    {
+        Matrix matrix = new Matrix(new int[,] {
+            { 1, 2, 3 },
+            { 4, 5, 6 }
+        });
+        
+        List<int> elements = new List<int>();
+        foreach (int value in matrix)
+            elements.Add(value);
+        
+        Assert.That(elements.Count, Is.EqualTo(6));
+        Assert.That(elements[0], Is.EqualTo(1));
+        Assert.That(elements[1], Is.EqualTo(2));
+        Assert.That(elements[2], Is.EqualTo(3));
+        Assert.That(elements[3], Is.EqualTo(4));
+        Assert.That(elements[4], Is.EqualTo(5));
+        Assert.That(elements[5], Is.EqualTo(6));
     }
 }

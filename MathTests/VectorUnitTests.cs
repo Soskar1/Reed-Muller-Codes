@@ -1,4 +1,4 @@
-namespace ReedMullerCodes.Math.Tests;
+namespace CodingTheory.Math.Tests;
 
 internal class VectorUnitTests
 {
@@ -102,5 +102,17 @@ internal class VectorUnitTests
         Assert.That(matrix[0, 0], Is.EqualTo(1));
         Assert.That(matrix[0, 1], Is.EqualTo(2));
         Assert.That(matrix[0, 2], Is.EqualTo(3));
+    }
+
+    [Test]
+    public void VectorForEach_IteratesOverElements_Correctly()
+    {
+        Vector vector = new Vector(new int[] { 1, 2, 3 });
+        int sum = 0;
+        
+        foreach (var value in vector)
+            sum += value;
+        
+        Assert.That(sum, Is.EqualTo(6));
     }
 }

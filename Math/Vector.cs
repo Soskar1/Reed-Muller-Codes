@@ -1,6 +1,8 @@
-﻿namespace ReedMullerCodes.Math;
+﻿using System.Collections;
 
-public class Vector
+namespace CodingTheory.Math;
+
+public class Vector : IEnumerable<int>
 {
     private int[] m_values;
     public int Length => m_values.Length;
@@ -32,6 +34,14 @@ public class Vector
 
         return new Matrix(matrixValues);
     }
+
+    public IEnumerator<int> GetEnumerator()
+    {
+        foreach (var value in m_values)
+            yield return value;
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     public int this[int index]
     {
