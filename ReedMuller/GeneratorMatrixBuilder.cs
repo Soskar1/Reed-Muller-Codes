@@ -18,11 +18,11 @@ public static class GeneratorMatrixBuilder
             });
         }
 
-        var smallerMatrix = Build(m - 1);
+        Matrix smallerMatrix = Build(m - 1);
         int rows = smallerMatrix.Rows + 1;
         int cols = smallerMatrix.Columns * 2;
 
-        var result = new Matrix(rows, cols);
+        Matrix result = new Matrix(rows, cols);
 
         for (int i = 0; i < smallerMatrix.Rows; ++i)
         {
