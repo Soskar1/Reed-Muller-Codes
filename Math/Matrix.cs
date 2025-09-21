@@ -1,6 +1,8 @@
-﻿namespace CodingTheory.Math;
+﻿using System.Collections;
 
-public class Matrix
+namespace CodingTheory.Math;
+
+public class Matrix : IEnumerable<int>
 {
     private int[,] m_values;
     public int Rows { get; init; }
@@ -14,6 +16,16 @@ public class Matrix
         m_values = values;
         Rows = values.GetLength(0);
         Columns = values.GetLength(1);
+    }
+
+    public Matrix(int rows, int columns)
+    {
+        if (rows <= 0 || columns <= 0)
+            throw new ArgumentException("Matrix must have at least one row and one column.");
+        
+        m_values = new int[rows, columns];
+        Rows = rows;
+        Columns = columns;
     }
 
     public int this[int row, int col]
@@ -45,6 +57,15 @@ public class Matrix
         
         return new Vector(columnValues);
     }
+
+    public IEnumerator<int> GetEnumerator()
+    {
+        for (int i = 0; i < Rows; ++i)
+            foreach (int value in GetRow(i))
+                yield return value;
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     public static Vector operator *(Matrix m, Vector v)
     {
