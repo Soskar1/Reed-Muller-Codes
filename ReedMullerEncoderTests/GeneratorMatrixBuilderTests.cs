@@ -7,40 +7,40 @@ public class GeneratorMatrixBuilderTests
     [Test]
     public void Build_M1_ReturnsCorrectMatrix()
     {
-        var expected = new Matrix(new int[,]
+        MatrixMod2 expected = new MatrixMod2(new int[,]
         {
             { 1, 1 },
             { 0, 1 }
         });
-        var result = GeneratorMatrixBuilder.Build(1);
+        MatrixMod2 result = GeneratorMatrixBuilder.Build(1);
         CompareMatrices(expected, result);
     }
 
     [Test]
     public void Build_M2_ReturnsCorrectMatrix()
     {
-        var expected = new Matrix(new int[,]
+        MatrixMod2 expected = new MatrixMod2(new int[,]
         {
             { 1, 1, 1, 1 },
             { 0, 1, 0, 1 },
             { 0, 0, 1, 1 }
         });
 
-        var result = GeneratorMatrixBuilder.Build(2);
+        MatrixMod2 result = GeneratorMatrixBuilder.Build(2);
         CompareMatrices(expected, result);
     }
 
     [Test]
     public void Build_M3_ReturnsCorrectMatrix()
     {
-        var expected = new Matrix(new int[,]
+        MatrixMod2 expected = new MatrixMod2(new int[,]
         {
             { 1, 1, 1, 1, 1, 1, 1, 1 },
             { 0, 1, 0, 1, 0, 1, 0, 1 },
             { 0, 0, 1, 1, 0, 0, 1, 1 },
             { 0, 0, 0, 0, 1, 1, 1, 1 }
         });
-        var result = GeneratorMatrixBuilder.Build(3);
+        MatrixMod2 result = GeneratorMatrixBuilder.Build(3);
         CompareMatrices(expected, result);
     }
 
@@ -51,7 +51,7 @@ public class GeneratorMatrixBuilderTests
         Assert.Throws<ArgumentException>(() => GeneratorMatrixBuilder.Build(-1));
     }
 
-    private void CompareMatrices(Matrix expected, Matrix actual)
+    private void CompareMatrices(MatrixMod2 expected, MatrixMod2 actual)
     {
         Assert.That(actual.Rows, Is.EqualTo(expected.Rows));
         Assert.That(actual.Columns, Is.EqualTo(expected.Columns));
