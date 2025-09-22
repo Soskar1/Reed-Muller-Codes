@@ -13,7 +13,7 @@ public class GeneratorMatrixBuilderTests
             { 0, 1 }
         });
         MatrixMod2 result = GeneratorMatrixBuilder.Build(1);
-        Assert.True(result == expected);
+        Assert.That(result, Is.EqualTo(expected));
     }
 
     [Test]
@@ -27,7 +27,7 @@ public class GeneratorMatrixBuilderTests
         });
 
         MatrixMod2 result = GeneratorMatrixBuilder.Build(2);
-        Assert.True(result == expected);
+        Assert.That(result, Is.EqualTo(expected));
     }
 
     [Test]
@@ -41,7 +41,7 @@ public class GeneratorMatrixBuilderTests
             { 0, 0, 0, 0, 1, 1, 1, 1 }
         });
         MatrixMod2 result = GeneratorMatrixBuilder.Build(3);
-        Assert.True(result == expected);
+        Assert.That(result, Is.EqualTo(expected));
     }
 
     [Test]
