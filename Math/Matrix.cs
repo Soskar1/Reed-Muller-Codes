@@ -7,6 +7,7 @@ public class Matrix : IEnumerable<int>
     private int[,] m_values;
     public int Rows { get; init; }
     public int Columns { get; init; }
+    public int[,] Values => m_values;
 
     public Matrix(int[,] values)
     {

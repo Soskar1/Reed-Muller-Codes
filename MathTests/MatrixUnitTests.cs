@@ -213,4 +213,25 @@ internal class MatrixUnitTests
         Assert.That(elements[4], Is.EqualTo(5));
         Assert.That(elements[5], Is.EqualTo(6));
     }
+
+    [Test]
+    public void MatrixToMod2_ReturnsMatrixMod2()
+    {
+        Matrix matrix = new Matrix(new int[,] {
+            { 1, 2, 3 },
+            { 4, 5, 6 }
+        });
+
+        MatrixMod2 result = matrix.ToMod2();
+
+        Assert.That(result.Rows, Is.EqualTo(2));
+        Assert.That(result.Columns, Is.EqualTo(3));
+
+        Assert.That(result[0, 0], Is.EqualTo(1));
+        Assert.That(result[0, 1], Is.EqualTo(0));
+        Assert.That(result[0, 2], Is.EqualTo(1));
+        Assert.That(result[1, 0], Is.EqualTo(0));
+        Assert.That(result[1, 1], Is.EqualTo(1));
+        Assert.That(result[1, 2], Is.EqualTo(0));
+    }
 }
