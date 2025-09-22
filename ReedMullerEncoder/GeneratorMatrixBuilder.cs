@@ -4,25 +4,25 @@ namespace CodingTheory.ReedMuller;
 
 public static class GeneratorMatrixBuilder
 {
-    public static Matrix Build(int m)
+    public static MatrixMod2 Build(int m)
     {
         if (m <= 0)
             throw new ArgumentException("Parameter m must be a positive integer.", nameof(m));
 
         if (m == 1)
         {
-            return new Matrix(new int[,]
+            return new MatrixMod2(new int[,]
             {
                 { 1, 1 },
                 { 0, 1 }
             });
         }
 
-        Matrix smallerMatrix = Build(m - 1);
+        MatrixMod2 smallerMatrix = Build(m - 1);
         int rows = smallerMatrix.Rows + 1;
         int cols = smallerMatrix.Columns * 2;
 
-        Matrix result = new Matrix(rows, cols);
+        MatrixMod2 result = new MatrixMod2(rows, cols);
 
         for (int i = 0; i < smallerMatrix.Rows; ++i)
         {
