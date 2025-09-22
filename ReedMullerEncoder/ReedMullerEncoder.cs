@@ -4,7 +4,7 @@ namespace CodingTheory.ReedMuller;
 
 public class ReedMullerEncoder
 {
-    private MatrixMod2 m_generatorMatrix;
+    private readonly MatrixMod2 m_generatorMatrix;
 
     // (1, m) Reed-Muller code
     public ReedMullerEncoder(int m)
