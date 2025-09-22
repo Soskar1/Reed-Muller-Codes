@@ -1,6 +1,6 @@
 ﻿namespace CodingTheory.Math;
 
-public class MatrixMod2 : Matrix
+public sealed class MatrixMod2 : Matrix
 {
     public MatrixMod2(int[,] values) : base(values)
     {

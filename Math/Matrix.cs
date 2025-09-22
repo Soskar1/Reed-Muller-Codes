@@ -2,7 +2,7 @@
 
 namespace CodingTheory.Math;
 
-public class Matrix : IEnumerable<int>
+public class Matrix : IEnumerable<int>, IEquatable<Matrix>
 {
     private int[,] m_values;
     public int Rows { get; init; }
@@ -106,4 +106,51 @@ public class Matrix : IEnumerable<int>
 
         return new Matrix(resultValues);
     }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is not Matrix other || other.Rows != Rows || other.Columns != Columns)
+            return false;
+
+        return Equals(other);
+    }
+
+    public bool Equals(Matrix? other)
+    {
+        if (other is null)
+            return false;
+
+        if (Object.ReferenceEquals(this, other))
+            return true;
+
+        if (GetType() != other.GetType())
+            return false;
+
+        if (other.Rows != Rows || other.Columns != Columns)
+            return false;
+
+        for (int i = 0; i < Rows; ++i)
+            for (int j = 0; j < Columns; ++j)
+                if (m_values[i, j] != other[i, j])
+                    return false;
+
+        return true;
+    }
+
+    public override int GetHashCode()
+    {
+        HashCode hash = new HashCode();
+        foreach (int value in this)
+            hash.Add(value);
+
+        return hash.ToHashCode();
+    }
+
+    public static bool operator ==(Matrix m1, Matrix m2) => Equals(m1, m2);
+    public static bool operator !=(Matrix m1, Matrix m2) => !Equals(m1, m2);
+
+    //public static Matrix KroneckerProduct(Matrix m1, Matrix m2)
+    //{
+
+    //}
 }
