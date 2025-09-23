@@ -4,15 +4,17 @@ namespace CodingTheory.Math.Tests;
 
 internal class TestCases
 {
-    internal static readonly Matrix H = new Matrix(new int[,] {
+    private static readonly Matrix H = new Matrix(new int[,] {
         { 1, 1 },
         { 1, -1 }});
 
-    internal static readonly Matrix I2 = new Matrix(new int[,]{
+    private static readonly Matrix I1 = new Matrix(new int[,] { { 1 } });
+
+    private static readonly Matrix I2 = new Matrix(new int[,]{
         { 1, 0 },
         { 0, 1 }});
 
-    internal static readonly Matrix I4 = new Matrix(new int[,]
+    private static readonly Matrix I4 = new Matrix(new int[,]
     {
         { 1, 0, 0, 0 },
         { 0, 1, 0, 0 },
@@ -20,14 +22,14 @@ internal class TestCases
         { 0, 0, 0, 1 }
     });
 
-    internal static readonly Matrix A3x2 = new Matrix(new int[,]
+    private static readonly Matrix A3x2 = new Matrix(new int[,]
     {
         { 1, 2 },
         { 3, 4 },
         { 1, 0 }
     });
 
-    internal static readonly Matrix B2x3 = new Matrix(new int[,]
+    private static readonly Matrix B2x3 = new Matrix(new int[,]
     {
         { 0, 5, 2 },
         { 6, 7, 3 }
@@ -78,6 +80,16 @@ internal class TestCases
                     { 6, 7, 3, 0, 0, 0 },
                 }))
                 .SetName("A3x2, B2x3");
+        }
+    }
+    
+    public static IEnumerable IdentityMatrixGenerationTestCases
+    {
+        get
+        {
+            yield return new TestCaseData(1, I1).SetName("IdentityMatrix size 1 generation");
+            yield return new TestCaseData(2, I2).SetName("IdentityMatrix size 2 generation");
+            yield return new TestCaseData(4, I4).SetName("IdentityMatrix size 4 generation");
         }
     }
 }

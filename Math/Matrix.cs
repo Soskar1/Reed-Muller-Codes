@@ -169,6 +169,20 @@ public class Matrix : IEnumerable<int>, IEquatable<Matrix>
         return kronecker;
     }
 
+    public static Matrix IdentityMatrix(int size)
+    {
+        Matrix identityMatrix = new Matrix(size, size);
+
+        int currentIndex = 0;
+        while (currentIndex < size)
+        {
+            identityMatrix[currentIndex, currentIndex] = 1;
+            ++currentIndex;
+        }
+
+        return identityMatrix;
+    }
+
     public override string ToString()
     {
         StringBuilder sb = new StringBuilder();
