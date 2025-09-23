@@ -115,4 +115,22 @@ internal class VectorUnitTests
         
         Assert.That(sum, Is.EqualTo(6));
     }
+
+    [Test]
+    public void VectorInitialization_PassingValidSize_CreatesVector()
+    {
+        Vector vector = new Vector(4);
+        Assert.That(vector.Length, Is.EqualTo(4));
+
+        vector = new Vector(6);
+        Assert.That(vector.Length, Is.EqualTo(6));
+    }
+
+    [Test]
+    public void VectorInitialization_PassingSizeThatBelowOne_ThrowsException()
+    {
+        Assert.Throws<ArgumentException>(() => new Vector(0));
+        Assert.Throws<ArgumentException>(() => new Vector(-1));
+        Assert.Throws<ArgumentException>(() => new Vector(-100));
+    }
 }
