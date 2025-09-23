@@ -1,5 +1,6 @@
 ﻿namespace CodingTheory.Math.Tests;
 
+[TestFixture]
 internal class MatrixUnitTests
 {
     [Test]
@@ -334,34 +335,10 @@ internal class MatrixUnitTests
         Assert.That(m1 != m2);
     }
 
-    //[Test]
-    //public void MatrixKroneckerProduct_ReturnsCorrectMatrix()
-    //{
-    //    Matrix m1 = new Matrix(new int[,]
-    //    {
-    //        { 1, 1 },
-    //        { 1, -1 }
-    //    });
-
-    //    Matrix m2 = new Matrix(new int[,]
-    //    {
-    //        { 1, 0 },
-    //        { 0, 1 }
-    //    });
-
-    //    Matrix expected = new Matrix(new int[,]
-    //    {
-    //        { 1, 1, 0, 0 },
-    //        { 1, -1, 0, 0 },
-    //        { 0, 0, 1, 1 },
-    //        { 0, 0, 1, -1 }
-    //    });
-
-    //    Matrix result = m1.KroneckerProduct(m2);
-
-    //    Assert.That(result.Rows, Is.EqualTo(4));
-    //    Assert.That(result.Columns, Is.EqualTo(4));
-
-
-    //}
+    [TestCaseSource(typeof(TestCases), nameof(TestCases.KroneckerProductTestCases))]
+    public void MatrixKroneckerProduct_ReturnsCorrectMatrix(Matrix m1, Matrix m2, Matrix expected)
+    {
+        Matrix result = m1.KroneckerProduct(m2);
+        Assert.That(result, Is.EqualTo(expected), result.ToString());
+    }
 }
