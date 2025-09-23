@@ -15,6 +15,14 @@ public class Vector : IEnumerable<int>
         m_values = values;
     }
 
+    public Vector(int size)
+    {
+        if (size <= 0)
+            throw new ArgumentException("Vector size must be positive.");
+
+        m_values = new int[size];
+    }
+
     public Matrix ToColumnMatrix()
     {
         int[,] matrixValues = new int[Length, 1];

@@ -341,4 +341,19 @@ internal class MatrixUnitTests
         Matrix result = m1.KroneckerProduct(m2);
         Assert.That(result, Is.EqualTo(expected), result.ToString());
     }
+
+    [TestCaseSource(typeof(TestCases), nameof(TestCases.IdentityMatrixGenerationTestCases))]
+    public void MatrixIdentityGeneration_ValidSize_ReturnsIdentityMatrix(int size, Matrix expected)
+    {
+        Matrix identityMatrix = Matrix.IdentityMatrix(size);
+        Assert.That(identityMatrix, Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void MatrixIdentityGeneration_SizeBelowOne_ThrowsException()
+    {
+        Assert.Throws<ArgumentException>(() => Matrix.IdentityMatrix(0));
+        Assert.Throws<ArgumentException>(() => Matrix.IdentityMatrix(-1));
+        Assert.Throws<ArgumentException>(() => Matrix.IdentityMatrix(-100));
+    }
 }
