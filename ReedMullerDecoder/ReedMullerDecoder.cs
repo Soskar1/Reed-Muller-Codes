@@ -54,8 +54,16 @@ public class ReedMullerDecoder
         }
 
         Vector decodedMessage = new Vector(m_m + 1);
-        
+        if (encodedMessage[largestIndex] > 0)
+            decodedMessage[0] = 1;
 
-        return new Vector(new int[] { 0 });
+        char[] indexBinary = Convert.ToString(largestIndex, 2).PadLeft(m_m, '0').ToCharArray();
+        Array.Reverse(indexBinary);
+        string mirroredBinaryRepresentation = new string(indexBinary);
+
+        for (int i = 1; i < decodedMessage.Length; ++i)
+            decodedMessage[i] = (int)Char.GetNumericValue(mirroredBinaryRepresentation[i - 1]);
+
+        return decodedMessage;
     }
 }
