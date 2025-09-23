@@ -1,5 +1,6 @@
 ﻿namespace CodingTheory.Math.Tests;
 
+[TestFixture]
 internal class MatrixUnitTests
 {
     [Test]
@@ -32,7 +33,7 @@ internal class MatrixUnitTests
     [Test]
     public void MatrixIndexing_ValidIndex_ReturnsCorrectValue()
     {
-        Matrix matrix = new Matrix(new int[,] { 
+        Matrix matrix = new Matrix(new int[,] {
             { 1, 2 },
             { 3, 4 }
         });
@@ -200,11 +201,11 @@ internal class MatrixUnitTests
             { 1, 2, 3 },
             { 4, 5, 6 }
         });
-        
+
         List<int> elements = new List<int>();
         foreach (int value in matrix)
             elements.Add(value);
-        
+
         Assert.That(elements.Count, Is.EqualTo(6));
         Assert.That(elements[0], Is.EqualTo(1));
         Assert.That(elements[1], Is.EqualTo(2));
@@ -233,5 +234,111 @@ internal class MatrixUnitTests
         Assert.That(result[1, 0], Is.EqualTo(0));
         Assert.That(result[1, 1], Is.EqualTo(1));
         Assert.That(result[1, 2], Is.EqualTo(0));
+    }
+
+    [Test]
+    public void MatrixEquality_Equals_ReturnsTrueForIdenticalMatrices()
+    {
+        Matrix m1 = new Matrix(new int[,] {
+            { 1, 2 },
+            { 3, 4 }
+        });
+        Matrix m2 = new Matrix(new int[,] {
+            { 1, 2 },
+            { 3, 4 }
+        });
+        Assert.That(m1.Equals(m2), Is.True);
+        Assert.That(m1.GetHashCode(), Is.EqualTo(m2.GetHashCode()));
+    }
+
+    [Test]
+    public void MatrixEquality_Equals_ReturnsFalseForDifferentMatrices()
+    {
+        Matrix m1 = new Matrix(new int[,] {
+            { 1, 2 },
+            { 3, 4 }
+        });
+        Matrix m2 = new Matrix(new int[,] {
+            { 1, 2 },
+            { 3, 5 }
+        });
+        Matrix m3 = new Matrix(new int[,] {
+            { 1, 2, 3 },
+            { 4, 5, 6 }
+        });
+
+        Assert.That(m1.Equals(m2), Is.False);
+        Assert.That(m1.GetHashCode(), Is.Not.EqualTo(m2.GetHashCode()));
+        Assert.That(m1.Equals(m3), Is.False);
+        Assert.That(m1.GetHashCode(), Is.Not.EqualTo(m3.GetHashCode()));
+        Assert.That(m2.Equals(m3), Is.False);
+        Assert.That(m2.GetHashCode(), Is.Not.EqualTo(m3.GetHashCode()));
+    }
+
+    [Test]
+    public void MatrixEquality_EqualsNull_ReturnsFalse()
+    {
+        Matrix m1 = new Matrix(new int[,] {
+            { 1, 2 },
+            { 3, 4 }
+        });
+        Assert.That(m1.Equals(null), Is.False);
+    }
+
+    [Test]
+    public void MatrixEquality_EqualsDifferentType_ReturnsFalse()
+    {
+        Matrix m1 = new Matrix(new int[,] {
+            { 1, 2 },
+            { 3, 4 }
+        });
+        Assert.That(m1.Equals("not a matrix"), Is.False);
+    }
+
+    [Test]
+    public void MatrixEquality_SameReference_ReturnsTrue()
+    {
+        Matrix m1 = new Matrix(new int[,] {
+            { 1, 2 },
+            { 3, 4 }
+        });
+        Matrix m2 = m1;
+        Assert.That(m1.Equals(m2), Is.True);
+        Assert.That(m1.GetHashCode(), Is.EqualTo(m2.GetHashCode()));
+    }
+
+    [Test]
+    public void MatrixEquality_EqualityOperator_ReturnsTrue()
+    {
+        Matrix m1 = new Matrix(new int[,] {
+            { 1, 2 },
+            { 3, 4 }
+        });
+        Matrix m2 = new Matrix(new int[,] {
+            { 1, 2 },
+            { 3, 4 }
+        });
+        Assert.That(m1 == m2);
+    }
+
+    [Test]
+    public void MatrixEquality_InequalityOperator_ReturnsFalse()
+    {
+        Matrix m1 = new Matrix(new int[,] {
+            { 1, 2 },
+            { 3, 4 }
+        });
+        Matrix m2 = new Matrix(new int[,] {
+            { 1, 2 },
+            { 3, 5 }
+        });
+        Assert.That(m1 != m2);
+    }
+
+    [TestCaseSource(typeof(TestCases), nameof(TestCases.KroneckerProductTestCases))]
+    public void MatrixKroneckerProduct_ReturnsCorrectMatrix(Matrix m1, Matrix m2, Matrix expected)
+    {
+        Matrix result = m1.KroneckerProduct(m2);
+        Assert.That(result, Is.EqualTo(expected), result.ToString());
     }
 }
