@@ -1,4 +1,4 @@
-﻿namespace BitIO;
+﻿namespace CodingTheory.BitIO;
 
 public class BitReader
 {

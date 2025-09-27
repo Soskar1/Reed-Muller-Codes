@@ -1,4 +1,4 @@
-namespace BitIO.Tests;
+namespace CodingTheory.BitIO.Tests;
 
 public class BitReaderTests
 {
