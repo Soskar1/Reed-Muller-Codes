@@ -108,4 +108,13 @@ public class Vector : IEnumerable<int>
 
         return true;
     }
+
+    public static Vector ByteToVector(byte value)
+    {
+        int[] bits = new int[8];
+        for (int i = 0; i < 8; i++)
+            bits[i] = (value >> (7 - i)) & 1;
+
+        return new Vector(bits);
+    }
 }
