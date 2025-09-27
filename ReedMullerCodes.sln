@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReedMullerDecoder", "ReedMu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReedMullerDecoderTests", "ReedMullerDecoderTests\ReedMullerDecoderTests.csproj", "{2C35F7B9-5908-47EE-AB4F-F560C28CE5EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FirstScenario", "FirstScenario\FirstScenario.csproj", "{8F92F506-6C5D-435E-BFAB-0ECAF5E70ECD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{2C35F7B9-5908-47EE-AB4F-F560C28CE5EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C35F7B9-5908-47EE-AB4F-F560C28CE5EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C35F7B9-5908-47EE-AB4F-F560C28CE5EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F92F506-6C5D-435E-BFAB-0ECAF5E70ECD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F92F506-6C5D-435E-BFAB-0ECAF5E70ECD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F92F506-6C5D-435E-BFAB-0ECAF5E70ECD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F92F506-6C5D-435E-BFAB-0ECAF5E70ECD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

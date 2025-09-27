@@ -1,6 +1,6 @@
 ﻿using CodingTheory.Math;
 
-namespace CodingTheory.Channel;
+namespace CodingTheory.Channels;
 
 public class Channel
 {

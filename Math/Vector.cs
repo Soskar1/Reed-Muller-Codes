@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Text;
 
 namespace CodingTheory.Math;
 
@@ -81,4 +82,30 @@ public class Vector : IEnumerable<int>
     }
 
     public static Vector operator *(int scalar, Vector v) => v * scalar;
+
+    public override string ToString()
+    {
+        StringBuilder sb = new StringBuilder();
+        foreach (int value in this)
+            sb.Append(value);
+
+        return sb.ToString();
+    }
+
+    public static bool TryParse(string value, out Vector v)
+    {
+        v = new Vector(value.Length);
+
+        for (int i = 0; i < value.Length; ++i)
+        {
+            char num = value[i];
+            if (!Char.IsDigit(num))
+                return false;
+
+            int intValue = (int)Char.GetNumericValue(num);
+            v[i] = intValue;
+        }
+
+        return true;
+    }
 }
