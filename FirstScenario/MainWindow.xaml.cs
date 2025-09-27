@@ -27,7 +27,7 @@ public partial class MainWindow : Window
             return;
         }
         
-        ReedMullerEncoder encoder = new ReedMullerEncoder(m_currentM);
+        ReedMullerEncoder encoder = new ReedMullerEncoder((byte)m_currentM);
         int inputVectorLength = inputVector.Text.Length;
 
         if (inputVectorLength != encoder.RequiredMessageLength)

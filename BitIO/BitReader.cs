@@ -42,6 +42,9 @@ public class BitReader
             {
                 _bitIndex = 0;
                 _byteIndex++;
+
+                if (_byteIndex == _buffer.Length)
+                    EndOfBuffer = true;
             }
         }
 
