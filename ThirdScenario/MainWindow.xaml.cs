@@ -3,7 +3,9 @@ using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using CodingTheory.Channels;
-using System.Diagnostics;
+using CodingTheory.ReedMuller;
+using Vector = CodingTheory.Math.Vector;
+using System.Windows.Controls;
 
 namespace CodingTheory.Presentation;
 
@@ -75,16 +77,41 @@ public partial class MainWindow : Window
             fs.Seek(offset, SeekOrigin.Begin);
             byte[] pixels = reader.ReadBytes((int)(fs.Length - offset));
 
-            pixels = m_channel.PassThrough(pixels);
-            byte[] bmpFileData = fileHeader.Concat(infoHeader).Concat(additionalHeaderData).Concat(pixels).ToArray();
-
-            MemoryStream memoryStream = new MemoryStream(bmpFileData);
-            BitmapImage bitmap = new BitmapImage();
-            bitmap.BeginInit();
-            bitmap.StreamSource = memoryStream;
-            bitmap.CacheOption = BitmapCacheOption.OnLoad;
-            bitmap.EndInit();
-            withoutAlgorithmImage.Source = bitmap;
+            PassThroughChannelWithoutAlgorithm(fileHeader, infoHeader, additionalHeaderData, pixels);
+            PassThroughChannelUsingReedMullerCodes(fileHeader, infoHeader, additionalHeaderData, pixels);
         }
+    }
+
+    private void PassThroughChannelWithoutAlgorithm(byte[] fileHeader, byte[] infoHeader, byte[] additionalHeaderData, byte[] pixels)
+    {
+        pixels = m_channel.PassThrough(pixels);
+        Display(fileHeader, infoHeader, additionalHeaderData, pixels, withoutAlgorithmImage);
+    }
+
+    private void PassThroughChannelUsingReedMullerCodes(byte[] fileHeader, byte[] infoHeader, byte[] additionalHeaderData, byte[] pixels)
+    {
+        ReedMullerEncoder encoder = new ReedMullerEncoder(byte.Parse(mInput.Text));
+        List<Vector> encodedMsg = encoder.Encode(pixels);
+
+        for (int i = 2; i < encodedMsg.Count; ++i)
+            encodedMsg[i] = m_channel.PassThrough(encodedMsg[i]);
+
+        ReedMullerDecoder decoder = new ReedMullerDecoder();
+        byte[] decodedPixels = decoder.Decode(encodedMsg.ToArray());
+
+        Display(fileHeader, infoHeader, additionalHeaderData, decodedPixels, withAlgorithmImage);
+    }
+
+    private void Display(byte[] fileHeader, byte[] infoHeader, byte[] additionalHeaderData, byte[] pixels, Image image)
+    {
+        byte[] bmpFileData = fileHeader.Concat(infoHeader).Concat(additionalHeaderData).Concat(pixels).ToArray();
+
+        MemoryStream memoryStream = new MemoryStream(bmpFileData);
+        BitmapImage bitmap = new BitmapImage();
+        bitmap.BeginInit();
+        bitmap.StreamSource = memoryStream;
+        bitmap.CacheOption = BitmapCacheOption.OnLoad;
+        bitmap.EndInit();
+        image.Source = bitmap;
     }
 }

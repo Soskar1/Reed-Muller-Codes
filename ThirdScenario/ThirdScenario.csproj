@@ -10,6 +10,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Channel\Channel.csproj" />
+    <ProjectReference Include="..\Math\Math.csproj" />
+    <ProjectReference Include="..\ReedMullerDecoder\ReedMullerDecoder.csproj" />
+    <ProjectReference Include="..\ReedMullerEncoder\ReedMullerEncoder.csproj" />
   </ItemGroup>
 
 </Project>
