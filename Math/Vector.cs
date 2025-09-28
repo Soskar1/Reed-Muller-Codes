@@ -117,4 +117,16 @@ public class Vector : IEnumerable<int>
 
         return new Vector(bits);
     }
+
+    public static explicit operator byte(Vector v)
+    {
+        if (v.Length > 8)
+            throw new InvalidCastException();
+
+        byte value = 0;
+        for (int i = 0; i < v.Length; ++i)
+            value = (byte)((value << 1) | v[i]);
+
+        return value;
+    }
 }
