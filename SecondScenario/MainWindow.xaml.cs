@@ -24,14 +24,8 @@ public partial class MainWindow : Window
 
     private void PassRawTextThroughChannel(string text)
     {
-        List<byte> distortedRawText = new List<byte>();
-        foreach (char c in text)
-        {
-            Vector v = Vector.ByteToVector((byte)c);
-            v = m_channel.PassThrough(v);
-            distortedRawText.Add((byte)v);
-        }
-        withoutAlgorithmTextBox.Text = Encoding.UTF8.GetString(distortedRawText.ToArray());
+        byte[] distortedRawText = m_channel.PassThrough(Encoding.UTF8.GetBytes(text));
+        withoutAlgorithmTextBox.Text = Encoding.UTF8.GetString(distortedRawText);
     }
 
     private void EncodeText(string text)
