@@ -1,0 +1,53 @@
+﻿<Window x:Class="SecondScenario.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SecondScenario"
+        mc:Ignorable="d"
+        Title="Second Scenario" Height="430" Width="650">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="17*"/>
+            <RowDefinition Height="121*"/>
+        </Grid.RowDefinitions>
+
+        <Label Content="Text encoding + decoding" HorizontalAlignment="Center" FontSize="22" Width="264"/>
+
+        <Grid Grid.Row="1" Margin="0,7,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0">
+                <Label Content="Input" HorizontalAlignment="Center"/>
+                <TextBox Width="200" Height="300" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1">
+                <Label Content="M parameter" HorizontalAlignment="Center" Margin="0, 100, 0, 0"/>
+                <TextBox Width="100"/>
+                <Button Width="120" Height="50" Content="Show result" Margin="0, 10, 0, 0"/>
+            </StackPanel>
+
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Grid.Row="0">
+                    <Label Content="Without Reed Muller codes usage" HorizontalAlignment="Center"/>
+                    <TextBox Width="200" Height="140" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" IsReadOnly="True"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1">
+                    <Label Content="With Reed Muller codes" HorizontalAlignment="Center"/>
+                    <TextBox Width="200" Height="140" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Visible" IsReadOnly="True"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
