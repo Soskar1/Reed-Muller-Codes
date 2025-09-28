@@ -2,9 +2,9 @@
 
 public class BitWriter
 {
-    private readonly List<byte> _buffer = new List<byte>();
-    private int _currentByte;
-    private int _bitPosition; // 0..7
+    private readonly List<byte> m_buffer = new List<byte>();
+    private int m_currentByte;
+    private int m_bitPosition; // 0..7
 
     public void WriteBit(int bit)
     {
@@ -12,14 +12,14 @@ public class BitWriter
             throw new ArgumentOutOfRangeException(nameof(bit), "Bit must be 0 or 1.");
 
         // Place bit at current position (MSB first)
-        _currentByte = (_currentByte << 1) | bit;
-        _bitPosition++;
+        m_currentByte = (m_currentByte << 1) | bit;
+        m_bitPosition++;
 
-        if (_bitPosition == 8)
+        if (m_bitPosition == 8)
         {
-            _buffer.Add((byte)_currentByte);
-            _currentByte = 0;
-            _bitPosition = 0;
+            m_buffer.Add((byte)m_currentByte);
+            m_currentByte = 0;
+            m_bitPosition = 0;
         }
     }
 
@@ -29,15 +29,15 @@ public class BitWriter
             WriteBit(bit);
     }
 
-    public byte[] ToArray()
+    public byte[] ToArray(int paddingZeros = 0)
     {
         // Flush last partial byte if needed (pad with zeros on the right)
-        if (_bitPosition > 0)
+        if (m_bitPosition > 0 && m_bitPosition - paddingZeros > 0)
         {
-            int shift = 8 - _bitPosition;
-            _currentByte <<= shift;
-            _buffer.Add((byte)_currentByte);
+            int shift = 8 - m_bitPosition;
+            m_currentByte <<= shift;
+            m_buffer.Add((byte)m_currentByte);
         }
-        return _buffer.ToArray();
+        return m_buffer.ToArray();
     }
 }

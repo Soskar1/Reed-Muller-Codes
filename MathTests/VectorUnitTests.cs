@@ -133,4 +133,32 @@ internal class VectorUnitTests
         Assert.Throws<ArgumentException>(() => new Vector(-1));
         Assert.Throws<ArgumentException>(() => new Vector(-100));
     }
+
+    [Test]
+    public void VectorToByte_PassingValidSizeVector_ReturnsByte()
+    {
+        Vector v = new Vector(new int[] { 1, 0, 1, 0, 1, 0, 1, 0 });
+
+        byte result = (byte)v;
+        Assert.That(result, Is.EqualTo(170));
+    }
+
+    [Test]
+    public void VectorToByte_PassingVectorWithSizeLowerThanByte_ReturnsByte()
+    {
+        Vector v = new Vector(new int[] { 1, 1, 1 });
+
+        byte result = (byte)v;
+        Assert.That(result, Is.EqualTo(7));
+    }
+
+    [Test]
+    public void VectorToByte_PassingNonValidSizeVector_ThrowsException()
+    {
+        Assert.Throws<InvalidCastException>(() =>
+        {
+            Vector v = new Vector(new int[] { 1, 0, 1, 0, 1, 0, 1, 0, 1 });
+            byte value = (byte)v;
+        });
+    }
 }

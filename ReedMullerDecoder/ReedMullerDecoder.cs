@@ -1,11 +1,14 @@
 ﻿using CodingTheory.Math;
+using CodingTheory.BitIO;
 
 namespace CodingTheory.ReedMuller;
 
 public class ReedMullerDecoder
 {
-    private readonly int m_m;
-    private readonly Matrix[] m_kroneckerMatrices;
+    private int m_m;
+    private Matrix[] m_kroneckerMatrices;
+
+    public ReedMullerDecoder() { }
 
     public ReedMullerDecoder(int m)
     {
@@ -65,5 +68,23 @@ public class ReedMullerDecoder
             decodedMessage[i] = (int)Char.GetNumericValue(mirroredBinaryRepresentation[i - 1]);
 
         return decodedMessage;
+    }
+
+    public byte[] Decode(Vector[] encodedMessage)
+    {
+        BitWriter writer = new BitWriter();
+
+        m_m = (byte)encodedMessage[0];
+        byte paddingZeros = (byte)encodedMessage[1];
+
+        m_kroneckerMatrices = GenerateKroneckerMatrices();
+
+        foreach (Vector msg in encodedMessage.Skip(2))
+        {
+            Vector decodedMessage = Decode(msg);
+            writer.WriteBits(decodedMessage);
+        }
+
+        return writer.ToArray(paddingZeros);
     }
 }
