@@ -1,9 +1,0 @@
-﻿<UserControl x:Class="CodingTheory.Presentation.FirstScenarioTabView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <StackPanel>
-        <Label Content="Hello, World!" />
-        <!--<TextBlock Text="Customers:" FontWeight="Bold"/>
-        <ListBox ItemsSource="{Binding Customers}" />-->
-    </StackPanel>
-</UserControl>
