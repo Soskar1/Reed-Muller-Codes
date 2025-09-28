@@ -24,7 +24,7 @@
             <StackPanel Grid.Column="0">
                 <StackPanel Orientation="Horizontal" Margin="33, 60, 0, 0">
                     <Button Content="Select image" Click="SelectImageClick"/>
-                    <Label Content="FileName" HorizontalAlignment="Center" Width="130"/>
+                    <Label x:Name="fileNameLabel" Content="" HorizontalAlignment="Center" Width="130"/>
                 </StackPanel>
                 <Image x:Name="imageInput" Width="200" Height="200" Margin="0,10,0,0"/>
             </StackPanel>
@@ -34,7 +34,8 @@
                 <TextBox x:Name="mInput" Width="100"/>
                 <Label Content="Error probability" HorizontalAlignment="Center" />
                 <TextBox x:Name="probabilityInput" Width="100"/>
-                <Button Width="120" Height="50" Content="Show result" Margin="0, 10, 0, 0" Click="showResultButton_Click"/>
+                <Button Width="120" Height="50" Content="Show result" Margin="0, 10, 0, 0" Click="Button_Click" />
+                <Label x:Name="errorDisplayLabel" HorizontalAlignment="Center" Foreground="Red"/>
             </StackPanel>
 
             <Grid Grid.Column="2">
