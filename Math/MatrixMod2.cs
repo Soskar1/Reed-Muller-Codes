@@ -2,6 +2,10 @@
 
 public sealed class MatrixMod2 : Matrix
 {
+    /// <summary>
+    /// Matrix mod2 constructor. All values are reduced mod 2.
+    /// </summary>
+    /// <param name="values">Value array</param>
     public MatrixMod2(int[,] values) : base(values)
     {
         for (int i = 0; i < Rows; ++i)
@@ -9,6 +13,11 @@ public sealed class MatrixMod2 : Matrix
                 values[i, j] %= 2;
     }
 
+    /// <summary>
+    /// Matrix mod2 constructor using row and column count
+    /// </summary>
+    /// <param name="rows">Row count</param>
+    /// <param name="columns">Column count</param>
     public MatrixMod2(int rows, int columns) : base(rows, columns) { }
 
     public new int this[int row, int col]
