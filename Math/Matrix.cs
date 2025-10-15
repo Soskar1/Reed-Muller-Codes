@@ -11,9 +11,11 @@ public class Matrix : IEnumerable<int>, IEquatable<Matrix>
     public int[,] Values => m_values;
 
     /// <summary>
-    /// Matrix constructor using initial values
+    /// Initializes a new instance of the <see cref="Matrix"/> class with the specified two-dimensional array of values.
     /// </summary>
-    /// <param name="values">Initial matrix values</param>
+    /// <param name="values">A two-dimensional array representing the elements of the matrix. The array must have at least one row and one
+    /// column.</param>
+    /// <exception cref="ArgumentException">Thrown if <paramref name="values"/> has zero rows or zero columns.</exception>
     public Matrix(int[,] values)
     {
         if (values.GetLength(0) == 0 || values.GetLength(1) == 0)
@@ -25,10 +27,11 @@ public class Matrix : IEnumerable<int>, IEquatable<Matrix>
     }
 
     /// <summary>
-    /// Zero matrix constructor with given dimensions
+    /// Initializes a new instance of the <see cref="Matrix"/> class with the specified number of rows and columns.
     /// </summary>
-    /// <param name="rows">Row count</param>
-    /// <param name="columns">Column count</param>
+    /// <param name="rows">The number of rows in the matrix. Must be greater than 0.</param>
+    /// <param name="columns">The number of columns in the matrix. Must be greater than 0.</param>
+    /// <exception cref="ArgumentException">Thrown if <paramref name="rows"/> or <paramref name="columns"/> is less than or equal to 0.</exception>
     public Matrix(int rows, int columns)
     {
         if (rows <= 0 || columns <= 0)
@@ -40,11 +43,11 @@ public class Matrix : IEnumerable<int>, IEquatable<Matrix>
     }
 
     /// <summary>
-    /// Indexing operator
+    /// Gets or sets the value at the specified row and column in the matrix.
     /// </summary>
-    /// <param name="row">Row index (from 0 to "row count - 1")</param>
-    /// <param name="col">Column index (from 0 to "column count - 1")</param>
-    /// <returns>Matrix value</returns>
+    /// <param name="row">The zero-based index of the row.</param>
+    /// <param name="col">The zero-based index of the column.</param>
+    /// <returns></returns>
     public int this[int row, int col]
     {
         get => m_values[row, col];
@@ -52,10 +55,11 @@ public class Matrix : IEnumerable<int>, IEquatable<Matrix>
     }
 
     /// <summary>
-    /// Get row vector
+    /// Retrieves a row from the matrix as a <see cref="Vector"/>.
     /// </summary>
-    /// <param name="rowIndex">Row index</param>
-    /// <returns>Row vector</returns>
+    /// <param name="rowIndex">The zero-based index of the row to retrieve. Must be within the range [0, <see cref="Rows"/> - 1].</param>
+    /// <returns>A <see cref="Vector"/> representing the values in the specified row of the matrix.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="rowIndex"/> is less than 0 or greater than or equal to <see cref="Rows"/>.</exception>
     public Vector GetRow(int rowIndex)
     {
         if (rowIndex < 0 || rowIndex >= Rows)
@@ -69,10 +73,11 @@ public class Matrix : IEnumerable<int>, IEquatable<Matrix>
     }
 
     /// <summary>
-    /// Get column vector
+    /// Retrieves a column from the matrix as a <see cref="Vector"/>.
     /// </summary>
-    /// <param name="columnIndex">Column index</param>
-    /// <returns>Column vector</returns>
+    /// <param name="columnIndex">The zero-based index of the column to retrieve. Must be within the range [0, <see cref="Columns"/> - 1].</param>
+    /// <returns>A <see cref="Vector"/> representing the values in the specified column.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown if <paramref name="columnIndex"/> is less than 0 or greater than or equal to <see cref="Columns"/>.</exception>
     public Vector GetColumn(int columnIndex)
     {
         if (columnIndex < 0 || columnIndex >= Columns)
@@ -86,9 +91,13 @@ public class Matrix : IEnumerable<int>, IEquatable<Matrix>
     }
 
     /// <summary>
-    /// Row enumeration
+    /// Retrieves all rows of the matrix as a sequence of vectors.
     /// </summary>
-    /// <returns>Returns each row starting from 0 to "row count - 1"</returns>
+    /// <remarks>Each row is returned as a <see cref="Vector"/> object. The rows are yielded in order,
+    /// starting from the first row. This method uses deferred execution, meaning rows are generated on demand as the
+    /// sequence is enumerated.</remarks>
+    /// <returns>An <see cref="IEnumerable{T}"/> of <see cref="Vector"/> objects, where each element represents a row of the
+    /// matrix.</returns>
     public IEnumerable<Vector> GetRows()
     {
         for (int i = 0; i < Rows; ++i)
@@ -96,9 +105,11 @@ public class Matrix : IEnumerable<int>, IEquatable<Matrix>
     }
 
     /// <summary>
-    /// Matrix value enumerations from first row, first column and ends at last row, last column.
+    /// Returns an enumerator that iterates through all the integer values in the collection.
     /// </summary>
-    /// <returns>Returns all values in the first row, then moves to the second row, etc.</returns>
+    /// <remarks>The enumerator traverses the collection row by row, yielding each integer value in
+    /// sequence.</remarks>
+    /// <returns>An <see cref="IEnumerator{T}"/> that can be used to iterate through the integers in the collection.</returns>
     public IEnumerator<int> GetEnumerator()
     {
         for (int i = 0; i < Rows; ++i)
@@ -109,12 +120,15 @@ public class Matrix : IEnumerable<int>, IEquatable<Matrix>
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
     /// <summary>
-    /// Matrix and vector multiplication
+    /// Multiplies a matrix by a vector, producing a new vector as the result.
     /// </summary>
-    /// <param name="m">Matrix (z x y)</param>
-    /// <param name="v">Vector with y elements</param>
-    /// <returns>Vector</returns>
-    /// <exception cref="ArgumentException"></exception>
+    /// <remarks>This operator performs standard matrix-vector multiplication. The input vector is treated as
+    /// a column vector  during the operation. The resulting vector has a length equal to the number of rows in the
+    /// matrix.</remarks>
+    /// <param name="m">The matrix to multiply. The number of columns in the matrix must match the length of the vector.</param>
+    /// <param name="v">The vector to multiply. The length of the vector must match the number of columns in the matrix.</param>
+    /// <returns>A new <see cref="Vector"/> representing the result of the matrix-vector multiplication.</returns>
+    /// <exception cref="ArgumentException">Thrown if the number of columns in <paramref name="m"/> does not match the length of <paramref name="v"/>.</exception>
     public static Vector operator *(Matrix m, Vector v)
     {
         if (m.Columns != v.Length)
@@ -128,12 +142,15 @@ public class Matrix : IEnumerable<int>, IEquatable<Matrix>
     }
 
     /// <summary>
-    /// Vector and matrix multiplication
+    /// Multiplies a vector by a matrix, returning the resulting vector.
     /// </summary>
-    /// <param name="v">Vector with y elements</param>
-    /// <param name="m">Matrix (y x z)</param>
-    /// <returns>Vector</returns>
-    /// <exception cref="ArgumentException"></exception>
+    /// <remarks>This operator performs a vector-matrix multiplication. The vector is treated as a row vector
+    /// during the operation. The resulting vector corresponds to the first row of the resulting matrix after the
+    /// multiplication.</remarks>
+    /// <param name="v">The vector to be multiplied. The length of the vector must match the number of rows in the matrix.</param>
+    /// <param name="m">The matrix to multiply the vector by. The matrix must have a number of rows equal to the length of the vector.</param>
+    /// <returns>A new <see cref="Vector"/> representing the result of the multiplication.</returns>
+    /// <exception cref="ArgumentException">Thrown if the length of <paramref name="v"/> does not match the number of rows in <paramref name="m"/>.</exception>
     public static Vector operator *(Vector v, Matrix m)
     {
         if (v.Length != m.Rows)
@@ -147,12 +164,15 @@ public class Matrix : IEnumerable<int>, IEquatable<Matrix>
     }
 
     /// <summary>
-    /// Matrix multiplication
+    /// Multiplies two matrices and returns the resulting matrix.
     /// </summary>
-    /// <param name="m1">Matrix (a x b)</param>
-    /// <param name="m2">Matric (b x c)</param>
-    /// <returns>Matrix (a x c)</returns>
-    /// <exception cref="ArgumentException"></exception>
+    /// <param name="m1">The first matrix to multiply. The number of columns in this matrix must match the number of rows in <paramref
+    /// name="m2"/>.</param>
+    /// <param name="m2">The second matrix to multiply. The number of rows in this matrix must match the number of columns in <paramref
+    /// name="m1"/>.</param>
+    /// <returns>A new <see cref="Matrix"/> representing the product of <paramref name="m1"/> and <paramref name="m2"/>.</returns>
+    /// <exception cref="ArgumentException">Thrown if the number of columns in <paramref name="m1"/> does not match the number of rows in <paramref
+    /// name="m2"/>.</exception>
     public static Matrix operator *(Matrix m1, Matrix m2)
     {
         if (m1.Columns != m2.Rows)
@@ -175,11 +195,14 @@ public class Matrix : IEnumerable<int>, IEquatable<Matrix>
     }
 
     /// <summary>
-    /// Matrix comparison by value
+    /// Determines whether the specified object is equal to the current <see cref="Matrix"/> instance.
     /// </summary>
-    /// <param name="obj">Any object. Can be anything, but it need to be a Matrix to pass through all comparison logic</param>
-    /// <returns>Returns False if obj is not a Matrix. Returns False if obj is a Matrix but if the provided matrix is not the same.
-    /// Return True if the provided matrix is the same</returns>
+    /// <remarks>This method performs a comparison based on the dimensions and values of the matrices.  If the
+    /// specified object is not a <see cref="Matrix"/> or has different dimensions, the method returns <see
+    /// langword="false"/>.</remarks>
+    /// <param name="obj">The object to compare with the current <see cref="Matrix"/> instance.</param>
+    /// <returns><see langword="true"/> if the specified object is a <see cref="Matrix"/> with the same dimensions and values as
+    /// the current instance; otherwise, <see langword="false"/>.</returns>
     public override bool Equals(object? obj)
     {
         if (obj is not Matrix other || other.Rows != Rows || other.Columns != Columns)
@@ -189,11 +212,13 @@ public class Matrix : IEnumerable<int>, IEquatable<Matrix>
     }
 
     /// <summary>
-    /// Matrix comparison by value
+    /// Determines whether the current <see cref="Matrix"/> is equal to another <see cref="Matrix"/>.
     /// </summary>
-    /// <param name="other">Any matrix</param>
-    /// <returns>Returns False if the provided matrix is not the same.
-    /// Returns True if the provided matrix is the same</returns>
+    /// <remarks>Two matrices are considered equal if they have the same dimensions and all corresponding
+    /// elements are equal.</remarks>
+    /// <param name="other">The <see cref="Matrix"/> to compare with the current instance. Can be <see langword="null"/>.</param>
+    /// <returns><see langword="true"/> if the specified <see cref="Matrix"/> is equal to the current instance; otherwise, <see
+    /// langword="false"/>.</returns>
     public bool Equals(Matrix? other)
     {
         if (other is null)
@@ -225,30 +250,20 @@ public class Matrix : IEnumerable<int>, IEquatable<Matrix>
         return hash.ToHashCode();
     }
 
-    /// <summary>
-    /// Matrix equality operator implementation
-    /// </summary>
-    /// <param name="m1">Any matrix</param>
-    /// <param name="m2">Any matrix</param>
-    /// <returns>Returns False if two matrices are not the same by value comparison.
-    /// Returns True if two matrices are the same by value comparison</returns>
     public static bool operator ==(Matrix m1, Matrix m2) => Equals(m1, m2);
-
-    /// <summary>
-    /// Matrix inequality operator implementation
-    /// </summary>
-    /// <param name="m1">Any matrix</param>
-    /// <param name="m2">Any matrix</param>
-    /// <returns>Returns False if two matrices are the same by value comparison.
-    /// Returns True if two matrices are not hte same by value comparison</returns>
     public static bool operator !=(Matrix m1, Matrix m2) => !Equals(m1, m2);
 
     /// <summary>
-    /// Kronecker product using two matrices
+    /// Computes the Kronecker product of two matrices.
     /// </summary>
-    /// <param name="m1">Any matrix</param>
-    /// <param name="m2">Any matrix</param>
-    /// <returns>Matrix</returns>
+    /// <remarks>The Kronecker product is a block matrix where each element of the first matrix is multiplied
+    /// by the entire second matrix. For example, if <paramref name="m1"/> is an <c>m x n</c> matrix and <paramref
+    /// name="m2"/> is a <c>p x q</c> matrix,  the resulting matrix will have dimensions <c>(m * p) x (n *
+    /// q)</c>.</remarks>
+    /// <param name="m1">The first matrix. Must not be <c>null</c>.</param>
+    /// <param name="m2">The second matrix. Must not be <c>null</c>.</param>
+    /// <returns>A new matrix representing the Kronecker product of <paramref name="m1"/> and <paramref name="m2"/>.  The
+    /// resulting matrix will have dimensions equal to the product of the row and column counts of the input matrices.</returns>
     public static Matrix KroneckerProduct(Matrix m1, Matrix m2)
     {
         Matrix kronecker = new Matrix(m1.Rows * m2.Rows, m1.Columns * m2.Columns);
@@ -263,10 +278,10 @@ public class Matrix : IEnumerable<int>, IEquatable<Matrix>
     }
 
     /// <summary>
-    /// Identity matrix creation using size parameter
+    /// Creates and returns an identity matrix of the specified size.
     /// </summary>
-    /// <param name="size">Size of the identity matrix</param>
-    /// <returns>Identity matrix (size x size)</returns>
+    /// <param name="size">The number of rows and columns in the square matrix. Must be a positive integer.</param>
+    /// <returns>A square matrix of the specified size with ones on the main diagonal and zeros elsewhere.</returns>
     public static Matrix IdentityMatrix(int size)
     {
         Matrix identityMatrix = new Matrix(size, size);

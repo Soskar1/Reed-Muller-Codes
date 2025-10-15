@@ -15,6 +15,23 @@ public partial class MainWindow : Window
         InitializeComponent();
     }
 
+    /// <summary>
+    /// Handles the click event for the <c>Show Result</c> button.
+    /// </summary>
+    /// <param name="sender">The control that triggered the event.</param>
+    /// <param name="e">The event arguments associated with the button click.</param>
+    /// <remarks>
+    /// When the user clicks the button:
+    /// <list type="number">
+    ///   <item>A <see cref="Channel"/> is initialized with the specified bit-flip probability.</item>
+    ///   <item>The input text is transmitted directly through the noisy channel.</item>
+    ///   <item>The same text is encoded using a <see cref="ReedMullerEncoder"/>,
+    ///         passed through the same channel, decoded via <see cref="ReedMullerDecoder"/>,
+    ///         and displayed for comparison.</item>
+    /// </list>
+    /// This side-by-side comparison illustrates the error resilience provided by
+    /// Reed–Muller codes.
+    /// </remarks>
     private void showResultButton_Click(object sender, RoutedEventArgs e)
     {
         m_channel = new Channel(float.Parse(probabilityInput.Text));
@@ -22,12 +39,43 @@ public partial class MainWindow : Window
         EncodeText(textInput.Text);
     }
 
+    /// <summary>
+    /// Simulates transmission of the input text through a noisy channel
+    /// without any error-correction encoding.
+    /// </summary>
+    /// <param name="text">The input text message to transmit.</param>
+    /// <remarks>
+    /// The method converts the input string to bytes using UTF-8 encoding,
+    /// sends it through the <see cref="Channel"/>, and reconstructs the resulting
+    /// (possibly corrupted) text for display.  
+    /// <para>
+    /// This demonstrates the direct effects of random bit errors on raw text data.
+    /// </para>
+    /// </remarks>
     private void PassRawTextThroughChannel(string text)
     {
         byte[] distortedRawText = m_channel.PassThrough(Encoding.UTF8.GetBytes(text));
         withoutAlgorithmTextBox.Text = Encoding.UTF8.GetString(distortedRawText);
     }
 
+    /// <summary>
+    /// Encodes, transmits, and decodes the input text using Reed–Muller coding.
+    /// </summary>
+    /// <param name="text">The input text message to process.</param>
+    /// <remarks>
+    /// This method demonstrates the complete Reed–Muller encoding and decoding process:
+    /// <list type="number">
+    ///   <item>Converts the input text to bytes.</item>
+    ///   <item>Encodes the bytes using <see cref="ReedMullerEncoder"/> with the specified parameter <c>m</c>.</item>
+    ///   <item>Passes each encoded vector through the noisy <see cref="Channel"/>.</item>
+    ///   <item>Decodes the distorted codewords using <see cref="ReedMullerDecoder"/>.</item>
+    ///   <item>Displays the reconstructed message, showing the error-corrected output.</item>
+    /// </list>
+    /// <para>
+    /// This simulation highlights the difference between unprotected and
+    /// Reed–Muller-protected transmission under identical noise conditions.
+    /// </para>
+    /// </remarks>
     private void EncodeText(string text)
     {
         ReedMullerEncoder encoder = new ReedMullerEncoder(byte.Parse(mInput.Text));

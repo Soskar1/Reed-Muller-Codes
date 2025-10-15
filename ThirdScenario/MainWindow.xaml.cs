@@ -23,6 +23,16 @@ public partial class MainWindow : Window
         InitializeComponent();
     }
 
+    /// <summary>
+    /// Handles the event for selecting an input image file.
+    /// </summary>
+    /// <param name="sender">The control that triggered the event.</param>
+    /// <param name="e">The event data associated with the action.</param>
+    /// <remarks>
+    /// Opens a standard file selection dialog, allowing the user to choose a
+    /// <c>.bmp</c> image file.  
+    /// Once selected, the image is loaded and displayed in the input preview area.
+    /// </remarks>
     private void SelectImageClick(object sender, RoutedEventArgs e)
     {
         OpenFileDialog fileDialog = new OpenFileDialog();
@@ -43,6 +53,20 @@ public partial class MainWindow : Window
         }
     }
 
+    /// <summary>
+    /// Handles the click event that initiates the channel simulation process.
+    /// </summary>
+    /// <param name="sender">The source control that triggered the event.</param>
+    /// <param name="e">The associated event data.</param>
+    /// <remarks>
+    /// This method reads the selected BMP file, validates its format, and
+    /// simulates transmission both with and without Reed–Muller encoding.
+    /// The resulting images are displayed side-by-side for comparison.
+    /// <para>
+    /// The BMP file headers and pixel data are parsed manually to ensure compatibility
+    /// with 24-bit uncompressed BMP images.
+    /// </para>
+    /// </remarks>
     private void Button_Click(object sender, RoutedEventArgs e)
     {
         m_channel = new Channel(float.Parse(probabilityInput.Text));
@@ -57,6 +81,7 @@ public partial class MainWindow : Window
             byte[] GetBitsPerPixelBytes() => [infoHeader[14], infoHeader[15]];
             byte[] GetOffsetBytes() => [fileHeader[10], fileHeader[11], fileHeader[12], fileHeader[13]];
 
+            // BMP format validation
             ushort type = BitConverter.ToUInt16(GetTypeBytes(), 0);  
             if (type != m_bmpFileType)
             {
@@ -64,6 +89,7 @@ public partial class MainWindow : Window
                 return;
             }
 
+            // 24-bit BMP validation
             ushort bitCount = BitConverter.ToUInt16(GetBitsPerPixelBytes(), 0);
             if (bitCount != m_bmpBitsPerPixel)
             {
@@ -71,6 +97,7 @@ public partial class MainWindow : Window
                 return;
             }
 
+            // Reading pixel data
             uint offset = BitConverter.ToUInt32(GetOffsetBytes(), 0);
             byte[] additionalHeaderData = reader.ReadBytes((int)offset - m_fileHeaderSize - m_infoHeaderSize);
 
@@ -82,12 +109,38 @@ public partial class MainWindow : Window
         }
     }
 
+    /// <summary>
+    /// Simulates image transmission through the noisy channel without any error correction.
+    /// </summary>
+    /// <param name="fileHeader">The BMP file header (14 bytes).</param>
+    /// <param name="infoHeader">The BMP info header (40 bytes).</param>
+    /// <param name="additionalHeaderData">Any additional header bytes between the info header and pixel data.</param>
+    /// <param name="pixels">The raw pixel byte array of the image.</param>
+    /// <remarks>
+    /// The pixel data is passed directly through the <see cref="Channel"/>,
+    /// which introduces random bit flips based on the specified probability.
+    /// The distorted image is reconstructed and displayed.
+    /// </remarks>
     private void PassThroughChannelWithoutAlgorithm(byte[] fileHeader, byte[] infoHeader, byte[] additionalHeaderData, byte[] pixels)
     {
         pixels = m_channel.PassThrough(pixels);
         Display(fileHeader, infoHeader, additionalHeaderData, pixels, withoutAlgorithmImage);
     }
 
+    /// <summary>
+    /// Simulates image transmission through the noisy channel using Reed–Muller encoding and decoding.
+    /// </summary>
+    /// <param name="fileHeader">The BMP file header (14 bytes).</param>
+    /// <param name="infoHeader">The BMP info header (40 bytes).</param>
+    /// <param name="additionalHeaderData">Any additional header bytes between the info header and pixel data.</param>
+    /// <param name="pixels">The raw pixel byte array of the image.</param>
+    /// <remarks>
+    /// The pixel data is first encoded using the <see cref="ReedMullerEncoder"/>,
+    /// transmitted through the <see cref="Channel"/> where random bit flips occur,
+    /// and then decoded using <see cref="ReedMullerDecoder"/>.  
+    /// The reconstructed pixel data is displayed, allowing comparison with
+    /// the unencoded version to observe error correction performance.
+    /// </remarks>
     private void PassThroughChannelUsingReedMullerCodes(byte[] fileHeader, byte[] infoHeader, byte[] additionalHeaderData, byte[] pixels)
     {
         ReedMullerEncoder encoder = new ReedMullerEncoder(byte.Parse(mInput.Text));
@@ -102,6 +155,19 @@ public partial class MainWindow : Window
         Display(fileHeader, infoHeader, additionalHeaderData, decodedPixels, withAlgorithmImage);
     }
 
+    /// <summary>
+    /// Displays a BMP image from header and pixel data in the specified <see cref="Image"/> control.
+    /// </summary>
+    /// <param name="fileHeader">The BMP file header (14 bytes).</param>
+    /// <param name="infoHeader">The BMP info header (40 bytes).</param>
+    /// <param name="additionalHeaderData">Additional BMP metadata bytes.</param>
+    /// <param name="pixels">The raw pixel array of the image to display.</param>
+    /// <param name="image">The target WPF <see cref="Image"/> control.</param>
+    /// <remarks>
+    /// Combines the BMP file components (headers and pixel data) into a single in-memory stream,
+    /// loads it into a <see cref="BitmapImage"/>, and displays the resulting bitmap
+    /// in the specified image container.
+    /// </remarks>
     private void Display(byte[] fileHeader, byte[] infoHeader, byte[] additionalHeaderData, byte[] pixels, Image image)
     {
         byte[] bmpFileData = fileHeader.Concat(infoHeader).Concat(additionalHeaderData).Concat(pixels).ToArray();

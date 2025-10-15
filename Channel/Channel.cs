@@ -67,14 +67,4 @@ public class Channel
 
         return distorted;
     }
-
-    public Vector[] PassThrough(Vector[] data)
-    {
-        Vector[] distorted = new Vector[data.Length];
-
-        for (int i = 0; i < data.Length; ++i)
-            distorted[i] = PassThrough(data[i]);
-
-        return distorted;
-    }
 }
