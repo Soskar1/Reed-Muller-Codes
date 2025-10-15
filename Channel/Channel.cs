@@ -12,13 +12,15 @@ public class Channel
     /// </summary>
     /// <param name="errorProbability">Value distortion probability in interval [0, 1]</param>
     /// <exception cref="ArgumentException"></exception>
-    public Channel(float errorProbability)
+    public Channel(float errorProbability) : this(errorProbability, new Random()) { }
+
+    public Channel(float errorProbability, Random random)
     {
         if (errorProbability < 0.0 || errorProbability > 1.0)
             throw new ArgumentException("Error probability must be between 0 and 1.", nameof(errorProbability));
 
         m_errorProbability = errorProbability;
-        m_random = new Random();
+        m_random = random;
     }
 
     /// <summary>
