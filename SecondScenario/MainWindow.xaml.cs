@@ -1,8 +1,9 @@
-﻿using System.Windows;
-using Vector = CodingTheory.Math.Vector;
-using Channel = CodingTheory.Channels.Channel;
+﻿using CodingTheory.ReedMuller;
+using System.Globalization;
 using System.Text;
-using CodingTheory.ReedMuller;
+using System.Windows;
+using Channel = CodingTheory.Channels.Channel;
+using Vector = CodingTheory.Math.Vector;
 
 namespace CodingTheory.Presentation;
 
@@ -34,9 +35,26 @@ public partial class MainWindow : Window
     /// </remarks>
     private void showResultButton_Click(object sender, RoutedEventArgs e)
     {
-        m_channel = new Channel(float.Parse(probabilityInput.Text));
+        if (!TryParseFloat(probabilityInput.Text, out float probability) || probability < 0 || probability > 1)
+        {
+            MessageBox.Show("Please enter a valid probability between 0 and 1.", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+
+        m_channel = new Channel(probability);
         PassRawTextThroughChannel(textInput.Text);
         EncodeText(textInput.Text);
+    }
+
+    private bool TryParseFloat(string input, out float result)
+    {
+        if (float.TryParse(input, NumberStyles.Float, CultureInfo.InvariantCulture, out result))
+            return true;
+
+        if (float.TryParse(input, NumberStyles.Float, new CultureInfo("fr-FR"), out result))
+            return true;
+
+        return false;
     }
 
     /// <summary>
@@ -78,6 +96,20 @@ public partial class MainWindow : Window
     /// </remarks>
     private void EncodeText(string text)
     {
+        if (byte.TryParse(mInput.Text, out byte mValue))
+        {
+            if (mValue < 2)
+            {
+                MessageBox.Show("Parameter m must be at least 2 for Reed–Muller coding.", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+        }
+        else
+        {
+            MessageBox.Show("Please enter a valid integer for parameter m.", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+
         ReedMullerEncoder encoder = new ReedMullerEncoder(byte.Parse(mInput.Text));
         byte[] bytes = Encoding.UTF8.GetBytes(text);
         List<Vector> encodedMessage = encoder.Encode(bytes);

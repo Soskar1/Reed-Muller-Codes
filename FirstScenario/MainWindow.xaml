@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CodingTheory.Presentation"
         mc:Ignorable="d"
-        Title="First Scenario" Height="300" Width="800">
+        Title="First Scenario" Height="300" Width="1000">
     <StackPanel>
         <Label Content="Reed Muller Codes R(1, m)" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="24"/>
 

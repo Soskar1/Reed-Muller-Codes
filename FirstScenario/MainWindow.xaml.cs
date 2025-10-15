@@ -1,5 +1,6 @@
 ﻿using CodingTheory.Channels;
 using CodingTheory.ReedMuller;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -41,7 +42,14 @@ public partial class MainWindow : Window
             e.Handled = true;
             return;
         }
-        
+
+        if (m_currentM < 2)
+        {
+            inputVectorErrorLabel.Content = "Error: M < 2";
+            e.Handled = true;
+            return;
+        }
+
         ReedMullerEncoder encoder = new ReedMullerEncoder((byte)m_currentM);
         int inputVectorLength = inputVector.Text.Length;
 
@@ -84,9 +92,9 @@ public partial class MainWindow : Window
     private void channelButton_Click(object sender, RoutedEventArgs e)
     {
         // probability validation
-        if (!float.TryParse(probabilityParameter.Text, out float probability))
+        if (!TryParseFloat(probabilityParameter.Text, out float probability) || probability < 0 || probability > 1)
         {
-            e.Handled = true;
+            MessageBox.Show("Please enter a valid probability between 0 and 1.", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
 
@@ -120,6 +128,15 @@ public partial class MainWindow : Window
         // Parsing distorted vector
         if (!Vector.TryParse(distortedVectorTextBox.Text, out Vector v))
         {
+            return;
+        }
+
+        if (v.Length != m_currentEncodedVector.Length)
+        {
+            TextBlock textBlock = new TextBlock();
+            textBlock.Foreground = Brushes.Red;
+            textBlock.Text = "Distorted vector length mismatch";
+            nErrorsLabel.Content = textBlock;
             return;
         }
 
@@ -160,5 +177,16 @@ public partial class MainWindow : Window
         ReedMullerDecoder decoder = new ReedMullerDecoder(m_currentM);
         Vector v = decoder.Decode(m_currentDistortedVector);
         resultVectorTextBox.Text = v.ToString();
+    }
+
+    private bool TryParseFloat(string input, out float result)
+    {
+        if (float.TryParse(input, NumberStyles.Float, CultureInfo.InvariantCulture, out result))
+            return true;
+
+        if (float.TryParse(input, NumberStyles.Float, new CultureInfo("fr-FR"), out result))
+            return true;
+
+        return false;
     }
 }

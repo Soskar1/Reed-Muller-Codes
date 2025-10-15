@@ -1,11 +1,12 @@
-﻿using Microsoft.Win32;
+﻿using CodingTheory.Channels;
+using CodingTheory.ReedMuller;
+using Microsoft.Win32;
+using System.Globalization;
 using System.IO;
 using System.Windows;
-using System.Windows.Media.Imaging;
-using CodingTheory.Channels;
-using CodingTheory.ReedMuller;
-using Vector = CodingTheory.Math.Vector;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
+using Vector = CodingTheory.Math.Vector;
 
 namespace CodingTheory.Presentation;
 
@@ -69,7 +70,20 @@ public partial class MainWindow : Window
     /// </remarks>
     private void Button_Click(object sender, RoutedEventArgs e)
     {
-        m_channel = new Channel(float.Parse(probabilityInput.Text));
+        if (!TryParseFloat(probabilityInput.Text, out float probability) || probability < 0 || probability > 1)
+        {
+            MessageBox.Show("Please enter a valid probability between 0 and 1.", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
+
+        if (m_selectedFile == null)
+        {
+            MessageBox.Show("Please select a BMP file first.", "No File Selected", MessageBoxButton.OK, MessageBoxImage.Warning);
+            SelectImageClick(sender, e);
+            return;
+        }
+
+        m_channel = new Channel(probability);
 
         using (FileStream fs = new FileStream(m_selectedFile, FileMode.Open, FileAccess.Read))
         using (BinaryReader reader = new BinaryReader(fs))
@@ -107,6 +121,17 @@ public partial class MainWindow : Window
             PassThroughChannelWithoutAlgorithm(fileHeader, infoHeader, additionalHeaderData, pixels);
             PassThroughChannelUsingReedMullerCodes(fileHeader, infoHeader, additionalHeaderData, pixels);
         }
+    }
+
+    private bool TryParseFloat(string input, out float result)
+    {
+        if (float.TryParse(input, NumberStyles.Float, CultureInfo.InvariantCulture, out result))
+            return true;
+
+        if (float.TryParse(input, NumberStyles.Float, new CultureInfo("fr-FR"), out result))
+            return true;
+
+        return false;
     }
 
     /// <summary>
