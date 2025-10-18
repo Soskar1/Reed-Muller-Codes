@@ -22,29 +22,28 @@ public class Benchmark
 
     public ExperimentResult Experiment(int experimentCount)
     {
-        Vector initialVector = ConstructRandomVector(m_encoder.RequiredMessageLength);
-        Vector encodedVector = m_encoder.Encode(initialVector);
-        float overallEfficiency = 0.0f;
-        float averageErrorCount = 0.0f;
+        int messageLength = m_encoder.RequiredMessageLength;
+        int totalBits = experimentCount * messageLength;
+        int totalErrors = 0;
+        int frameErrors = 0;
 
         for (int i = 0; i < experimentCount; ++i)
         {
-            Vector distortedVector = m_channel.PassThrough(encodedVector);
-            Vector decodedVector = m_decoder.Decode(distortedVector);
+            Vector message = ConstructRandomVector(messageLength);
+            Vector encoded = m_encoder.Encode(message);
+            Vector noisy = m_channel.PassThrough(encoded);
+            Vector decoded = m_decoder.Decode(noisy);
 
-            int errorCount = CountErrors(initialVector, decodedVector);
-            float efficiency = 1.0f - (float)errorCount / initialVector.Length;
-            averageErrorCount += errorCount;
-            overallEfficiency += efficiency;
-
-            // Console.WriteLine($"[{i}]".PadRight(experimentCount.ToString().Length + 2) + $"{initialVector} -> {decodedVector}, ({errorCount} errors, {efficiency * 100}% efficiency)");
+            int errors = CountErrors(message, decoded);
+            totalErrors += errors;
+            if (errors > 0) frameErrors++;
         }
 
-        overallEfficiency = (float)System.Math.Round(overallEfficiency / experimentCount, 3);
-        averageErrorCount = (float)System.Math.Round(averageErrorCount / experimentCount, 3);
-        ExperimentResult result = new ExperimentResult(overallEfficiency, averageErrorCount);
+        float bitErrorRate = (float)System.Math.Round((float)totalErrors / totalBits, 3);
+        float frameErrorRate = (float)System.Math.Round((float)frameErrors / experimentCount, 3);
+        float efficiency = (float)System.Math.Round(1.0f - bitErrorRate, 3);
 
-        return result;
+        return new ExperimentResult(efficiency, bitErrorRate, frameErrorRate);
     }
 
     private Vector ConstructRandomVector(int length)

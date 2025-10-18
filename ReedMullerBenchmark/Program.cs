@@ -33,5 +33,5 @@ for (int m = 2; m < maxM; ++m)
 {
     Benchmark benchmark = new Benchmark(m, errorProbability, random);
     ExperimentResult result = benchmark.Experiment(experimentCount);
-    Console.WriteLine($"m = {m}, efficiency = {result.Efficiency}, average error count = {result.AverageErrorCount}");
+    Console.WriteLine($"m = {m}, efficiency = {result.Efficiency}, bit error rate = {result.BitErrorRate}, frame error rate = {result.FrameErrorRate}");
 }

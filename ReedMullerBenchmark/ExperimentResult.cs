@@ -1,3 +1,3 @@
 ﻿namespace CodingTheory.ReedMullerCodesBenchmark;
 
-public record ExperimentResult(float Efficiency, float AverageErrorCount);
+public record ExperimentResult(float Efficiency, float BitErrorRate, float FrameErrorRate);
